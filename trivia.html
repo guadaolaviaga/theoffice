@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Trivia The Office</title>
+  <link rel="stylesheet" href="estilo.css"/>
+  <link rel="stylesheet" href="trivia.css"/>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="logo">
+      <img src="img/iconotheoffice.svg" alt="Logo The Office">
+    </a>    
+    <ul>
+      <li><a href="momentos.html">Momentos Icónicos</a></li>
+      <li><a href="trivia.html">Trivia</a></li>
+      <li><a href="forodefans.html">Foro de Fans</a></li>
+      <li><a href="galeria.html">Galería</a></li>
+      <li><a href="sobrelaserie.html">Sobre la Serie</a></li>
+    </ul>
+  </nav>
+
+  <section class="trivia-container">
+    <h1>Trivia de The Office</h1>
+    <p id="pregunta">Cargando pregunta...</p>
+    <div id="opciones"></div>
+
+    <div id="premio">
+      <h2>¡Ganaste!</h2>
+      <img src="img/premio.gif" alt="Premio divertido" />
+    </div>
+  </section>
+
+  <script>
+    const preguntas = [
+      {
+        texto: "¿Quién dijo: 'That's what she said'?",
+        opciones: ["Jim Halpert", "Michael Scott", "Angela Martin"],
+        correcta: 1
+      },
+      {
+        texto: "¿Quién hizo el simulacro de incendio en 'Stress Relief'?",
+        opciones: ["Dwight", "Stanley", "Pam"],
+        correcta: 0
+      },
+      {
+        texto: "¿A qué universidad fue Andy Bernard?",
+        opciones: ["Harvard", "Cornell", "Stanford"],
+        correcta: 1
+      },
+      {
+        texto: "¿Quién tiró el chili al piso?",
+        opciones: ["Michael", "Kevin", "Creed"],
+        correcta: 1
+      },
+      {
+        texto: "¿Cómo se llama la empresa de papel?",
+        opciones: ["Scranton Inc.", "Dunder Mifflin", "Paper Pro"],
+        correcta: 1
+      }
+    ];
+
+    let actual = 0;
+
+    function mostrarPregunta() {
+      const pregunta = preguntas[actual];
+      document.getElementById("pregunta").textContent = pregunta.texto;
+
+      const contenedor = document.getElementById("opciones");
+      contenedor.innerHTML = "";
+
+      pregunta.opciones.forEach((opcion, i) => {
+        const btn = document.createElement("button");
+        btn.classList.add("opcion");
+        btn.textContent = opcion;
+        btn.onclick = () => verificarRespuesta(i);
+        contenedor.appendChild(btn);
+      });
+    }
+
+    function verificarRespuesta(indice) {
+      if (indice === preguntas[actual].correcta) {
+        actual++;
+        if (actual < preguntas.length) {
+          mostrarPregunta();
+        } else {
+          document.getElementById("pregunta").textContent = "";
+          document.getElementById("opciones").innerHTML = "";
+          document.getElementById("premio").style.display = "block";
+        }
+      } else {
+        alert("¡Ups! Esa no era. Intentá de nuevo.");
+      }
+    }
+
+    mostrarPregunta();
+  </script>
+
+</body>
+</html>

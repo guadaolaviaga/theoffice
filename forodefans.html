@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Foro de Fans - The Office</title>
+  <link rel="stylesheet" href="estilo.css"/>
+</head>
+<body>
+
+  <!-- Barra de navegación -->
+  <nav>
+    <a href="index.html" class="logo">
+      <img src="img/iconotheoffice.svg" alt="Logo The Office">
+    </a>    
+    <ul>
+      <li><a href="momentos.html">Momentos Icónicos</a></li>
+      <li><a href="trivia.html">Trivia</a></li>
+      <li><a href="forodefans.html">Foro de Fans</a></li>
+      <li><a href="galeria.html">Galería</a></li>
+      <li><a href="sobrelaserie.html">Sobre la Serie</a></li>
+    </ul>
+  </nav>
+
+  <!-- Sección del Foro -->
+  <section class="foro">
+    <h1>¡Bienvenido al Foro de Fans!</h1>
+    <p>Compartí teorías, opiniones, memes o simplemente tu amor por la serie.</p>
+
+    <form class="foro-formulario" id="formularioForo">
+      <label for="nombre">Nombre:</label>
+      <input type="text" id="nombre" name="nombre" required>
+
+      <label for="mensaje">Mensaje:</label>
+      <textarea id="mensaje" name="mensaje" rows="4" required></textarea>
+
+      <button type="submit">Publicar</button>
+    </form>
+
+    <button id="borrarTodo" class="borrar-btn">Borrar todos los mensajes</button>
+
+    <div class="foro-publicaciones" id="publicaciones">
+      <h2>Publicaciones recientes</h2>
+    </div>
+  </section>
+
+  <!-- Script funcional con localStorage -->
+  <script>
+    const formulario = document.getElementById('formularioForo');
+    const publicaciones = document.getElementById('publicaciones');
+    const borrarBtn = document.getElementById('borrarTodo');
+
+    // Cargar mensajes desde localStorage
+    const mensajesGuardados = JSON.parse(localStorage.getItem('foroMensajes')) || [];
+
+    function mostrarMensajes() {
+      publicaciones.innerHTML = '<h2>Publicaciones recientes</h2>';
+      if (mensajesGuardados.length === 0) {
+        publicaciones.innerHTML += '<p>Aún no hay publicaciones.</p>';
+      } else {
+        mensajesGuardados.forEach((msg) => {
+          const publicacion = document.createElement('div');
+          publicacion.classList.add('publicacion');
+          publicacion.innerHTML = `<strong>${msg.nombre}:</strong><p>${msg.mensaje}</p>`;
+          publicaciones.appendChild(publicacion);
+        });
+      }
+    }
+
+    mostrarMensajes();
+
+    formulario.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const nombre = document.getElementById('nombre').value.trim();
+      const mensaje = document.getElementById('mensaje').value.trim();
+
+      if (nombre && mensaje) {
+        const nueva = { nombre, mensaje };
+        mensajesGuardados.push(nueva);
+        localStorage.setItem('foroMensajes', JSON.stringify(mensajesGuardados));
+        mostrarMensajes();
+        formulario.reset();
+      }
+    });
+
+    borrarBtn.addEventListener('click', function () {
+      if (confirm('¿Estás seguro de que querés borrar todos los mensajes?')) {
+        localStorage.removeItem('foroMensajes');
+        mensajesGuardados.length = 0;
+        mostrarMensajes();
+      }
+    });
+  </script>
+
+</body>
+</html>
